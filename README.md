@@ -1,2 +1,1 @@
-# OpenClassrooms
-OC training and projects
+# OpenClassrooms training and projects
