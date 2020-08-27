@@ -13,8 +13,8 @@ def db_connect():
     try:
         dbconnect = mysql.connect(
             host = 'localhost',
-            user = 'ayckinn',
-            passwd = 'marlene',
+            user = 'username',
+            passwd = 'password',
             database = 'openfoodfact')
     except Exception:
         sys.exit(Fore.RED + "\n /!\\ DATABASE ACCESS DENIED... Please retry later or check your login/password !\n")
