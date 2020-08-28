@@ -1,27 +1,73 @@
+# ---------------------------------
+# -- CATEGORIES TABLE MANAGEMENT --
+# ---------------------------------
+
 import requests
+import sys
+
 from db_access import db_access
 from logo import logo
+from tools import constants as cst
 
 
-def create_category_table():
-    db_name = "openfoodfact"
-    table_name = "Categories"
+sql_cnx = db_access.DBcnx()
 
-    db_access.db_connect()
-    db_cnx = db_access.db_connect()
-    cursor = db_cnx.cursor()
-    logo.logo()
 
-    api_link = "https://fr.openfoodfacts.org/categories.json"
-    json_data_rq = requests.get(api_link).json()
+class Category:
+    """
+    Class used for display categories and management 
+    """
 
-    index = 0
-    for _ in json_data_rq:
-        cursor.execute(f"INSERT INTO {db_name}.{table_name} (id, name, url, nb_products)"
-                       "VALUES (NULL, %s, %s, %s)",
-                       (json_data_rq['tags'][index]['name'],
-                        json_data_rq['tags'][index]['url'],
-                        json_data_rq['tags'][index]['products']))
-        index += 1
 
-    db_cnx.commit()
+    def __init__(self):
+        self.db_cnx = sql_cnx.db_connect()
+        self.cursor = self.db_cnx.cursor()
+
+
+    def create_category_table(self):
+        self.api_link = "https://fr.openfoodfacts.org/categories.json"
+        self.json_data_rq = requests.get(self.api_link).json()
+
+        self.index = 0
+        for _ in self.json_data_rq['tags']:
+            self.cursor.execute(f"INSERT INTO {cst.DB_NAME}.{cst.CATG_TABLE}"
+                                f"(id, name, url, nb_products) VALUES (NULL, %s, %s, %s)",
+                                (self.json_data_rq['tags'][self.index]['name'],
+                                 self.json_data_rq['tags'][self.index]['url'],
+                                 self.json_data_rq['tags'][self.index]['products']))
+            self.index += 1
+
+        self.db_cnx.commit()
+
+
+    def check_category_table(self):
+        self.cursor.execute(f"SELECT id FROM {cst.DB_NAME}.{cst.CATG_TABLE}")
+        self.catg_id = self.cursor.fetchall()
+
+        return self.catg_id
+
+
+    def category_for_terminal(self, choice): 
+
+        if choice == "1":
+            self.create_category_table()
+            print(cst.MAGENTA + "\n DATABASE STATUS => " + cst.GREEN + "DONE\n")
+
+        elif choice == "2":
+            if len(self.check_category_table()) == 0:  # -- If table is empty
+                    print(cst.MAGENTA + "\n Categories table is empty...")
+            else:
+                self.display_category_list()
+
+        else:
+            print(cst.RED + "\n WRONG CHOICE ! Please, select with 'y' or 'n'.\n")
+            print("")
+
+
+    def display_category_list(self):
+        self.cursor.execute(f"SELECT * FROM {cst.DB_NAME}.{cst.CATG_TABLE}")
+        self.categories = self.cursor.fetchall()
+
+        for catg in self.categories:
+            print(cst.YELLOW + str(catg))
+        print("")
