@@ -1,0 +1,5 @@
+colorama
+requests
+mysql-connector
+pyqt5
+pyqt5-tools
