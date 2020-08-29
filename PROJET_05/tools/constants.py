@@ -13,8 +13,8 @@ colorama.init(autoreset=True)
 
 # -- DATABASE CONSTANTS
 DB_HOST = 'localhost'
-DB_USERNAME = 'ayckinn'
-DB_PASSWORD = 'marlene'
+DB_USERNAME = 'username'
+DB_PASSWORD = 'password'
 DB_NAME = 'openfoodfacts'
 
 # -- TABLES CONSTANTS
