@@ -2,7 +2,10 @@
 # -- MODULE CONTAINING CONSTANTS OF PROJECT --
 # --------------------------------------------
 
+
+import pathlib
 import colorama
+
 from colorama import Fore
 
 colorama.init(autoreset=True)
@@ -10,8 +13,8 @@ colorama.init(autoreset=True)
 
 # -- DATABASE CONSTANTS
 DB_HOST = 'localhost'
-DB_USERNAME = 'username'
-DB_PASSWORD = 'password'
+DB_USERNAME = 'ayckinn'
+DB_PASSWORD = 'marlene'
 DB_NAME = 'openfoodfacts'
 
 # -- TABLES CONSTANTS
@@ -28,3 +31,7 @@ RED = Fore.RED
 YELLOW = Fore.YELLOW
 WHITE = Fore.WHITE
 RESET = Fore.RESET
+
+# -- UI MODE
+USER_DIR = str(pathlib.Path.home())
+FONT_PATH = (USER_DIR + "\\AppData\\Local\\Microsoft\\Windows\\Fonts\\Failed-3d-Filled.ttf")

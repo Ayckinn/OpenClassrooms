@@ -2,8 +2,10 @@
 # -- CATEGORIES TABLE MANAGEMENT --
 # ---------------------------------
 
+
 import requests
 import sys
+import time
 
 from db_access import db_access
 from logo import logo
@@ -48,14 +50,15 @@ class Category:
 
 
     def category_for_terminal(self, choice): 
-
         if choice == "1":
             self.create_category_table()
-            print(cst.MAGENTA + "\n DATABASE STATUS => " + cst.GREEN + "DONE\n")
+            print(cst.MAGENTA + "\n DATABASE STATUS => " + cst.GREEN + "DATABASE UPDATED SUCCESSFULLY...\n")
 
         elif choice == "2":
             if len(self.check_category_table()) == 0:  # -- If table is empty
                     print(cst.MAGENTA + "\n Categories table is empty...")
+                    time.sleep(3)
+                    logo.logo()
             else:
                 self.display_category_list()
 
