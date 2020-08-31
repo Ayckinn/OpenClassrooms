@@ -7,14 +7,16 @@ import pathlib
 import colorama
 
 from colorama import Fore
+from db_access import db_access
+from PyQt5 import QtWidgets, uic
 
 colorama.init(autoreset=True)
 
 
 # -- DATABASE CONSTANTS
 DB_HOST = 'localhost'
-DB_USERNAME = 'username'
-DB_PASSWORD = 'password'
+DB_USERNAME = 'ayckinn'
+DB_PASSWORD = 'marlene'
 DB_NAME = 'openfoodfacts'
 
 # -- TABLES CONSTANTS
