@@ -9,10 +9,10 @@
 
 
 import sys
-import terminal_app
 import ui_app
+import terminal_app
 
-from logo import logo
+from tools import logo
 from tools import constants as cst
 
 
@@ -21,12 +21,12 @@ def main():
 
 	try:
 		while loop:
-			logo.logo()
+			logo.logo_connected()
 
 			print(""" Choose a view mode :
 
-		 [1]  \033[1;36mTerminal mode\033[0;m
-		 [2]  \033[1;36mUI mode\033[0;m
+		 [1]  \033[1;36mTerminal Interface mode\033[0;m
+		 [2]  \033[1;36mGraphical User Interface mode\033[0;m
 
 		 [0x] \033[1;36mExit\033[0;m\n""")
 

@@ -3,14 +3,13 @@
 # ---------------------------------
 
 
-import requests
 import sys
 import time
+import requests
 
+from tools import logo
 from db_access import db_access
-from logo import logo
 from tools import constants as cst
-
 
 sql_cnx = db_access.DBcnx()
 
@@ -49,28 +48,35 @@ class Category:
         return self.catg_id
 
 
+    def show_category_list(self):
+        self.cursor.execute(f"SELECT * FROM {cst.DB_NAME}.{cst.CATG_TABLE}")
+        self.catg_list = self.cursor.fetchall()
+
+        return self.catg_list
+
+
+    # ///////////////////////////// TERMINAL MODE /////////////////////////////
+
     def category_for_terminal(self, choice): 
         if choice == "1":
             self.create_category_table()
-            print(cst.MAGENTA + "\n DATABASE STATUS => " + cst.GREEN + "DATABASE UPDATED SUCCESSFULLY...\n")
-
+            print(cst.MAGENTA + "\n DATABASE STATUS => "
+                + cst.GREEN + "DATABASE HAS BEEN UPDATED SUCCESSFULLY...")
+            print(cst.YELLOW + "\n There are "
+                + cst.CYAN + f"{len(self.check_category_table())}"
+                + cst.YELLOW + " categories in database.")
+            
         elif choice == "2":
             if len(self.check_category_table()) == 0:  # -- If table is empty
                     print(cst.MAGENTA + "\n Categories table is empty...")
                     time.sleep(3)
                     logo.logo()
             else:
-                self.display_category_list()
+                for catg in self.show_category_list():
+                    print(cst.YELLOW + (str(catg)))
+                
+                print("")
 
         else:
             print(cst.RED + "\n WRONG CHOICE ! Please, select with 'y' or 'n'.\n")
             print("")
-
-
-    def display_category_list(self):
-        self.cursor.execute(f"SELECT * FROM {cst.DB_NAME}.{cst.CATG_TABLE}")
-        self.categories = self.cursor.fetchall()
-
-        for catg in self.categories:
-            print(cst.YELLOW + str(catg))
-        print("")
