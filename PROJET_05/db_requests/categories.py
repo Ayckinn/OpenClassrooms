@@ -70,7 +70,7 @@ class Category:
             if len(self.check_category_table()) == 0:  # -- If table is empty
                     print(cst.MAGENTA + "\n Categories table is empty...")
                     time.sleep(3)
-                    logo.logo()
+                    logo.logo_connected()
             else:
                 for catg in self.show_category_list():
                     print(cst.YELLOW + (str(catg)))
