@@ -2,81 +2,70 @@
 # -- CATEGORIES TABLE MANAGEMENT --
 # ---------------------------------
 
-
 import sys
-import time
 import requests
 
-from tools import logo
+from term import logo
 from db_access import db_access
 from tools import constants as cst
 
-sql_cnx = db_access.DBcnx()
+sql_connection = db_access.DBConnection()
 
 
 class Category:
     """
-    Class used for display categories and management 
+    Class used to display categories and management 
     """
 
-
     def __init__(self):
-        self.db_cnx = sql_cnx.db_connect()
-        self.cursor = self.db_cnx.cursor()
+        self.db_connection = sql_connection.db_connect()
+        self.cursor = self.db_connection.cursor()
 
 
-    def create_category_table(self):
-        self.api_link = "https://fr.openfoodfacts.org/categories.json"
-        self.json_data_rq = requests.get(self.api_link).json()
+    def category_db_keys(self, category_id, name, url):
+        self.id = category_id
+        self.name = name
+        self.url = url
 
-        self.index = 0
-        for _ in self.json_data_rq['tags']:
-            self.cursor.execute(f"INSERT INTO {cst.DB_NAME}.{cst.CATG_TABLE}"
-                                f"(id, name, url, nb_products) VALUES (NULL, %s, %s, %s)",
-                                (self.json_data_rq['tags'][self.index]['name'],
-                                 self.json_data_rq['tags'][self.index]['url'],
-                                 self.json_data_rq['tags'][self.index]['products']))
-            self.index += 1
+        self.get_value_keys = (category_id, name, url)
 
-        self.db_cnx.commit()
+        return self.get_value_keys
 
 
-    def check_category_table(self):
-        self.cursor.execute(f"SELECT id FROM {cst.DB_NAME}.{cst.CATG_TABLE}")
-        self.catg_id = self.cursor.fetchall()
+    def db_column(self, column):
+        self.cursor.execute(f"SELECT {column} FROM {cst.DB_NAME}.{cst.CATEGORIES_TABLE}")
+        self.query = self.cursor.fetchall()
 
-        return self.catg_id
+        return self.query
+
+        
+    def add_categories_in_db(self):
+        self.json_data_request = requests.get(cst.CATEGORIES_JSON_URL).json()
+
+        self.category_index = 0
+        for categorie in range(100):
+            self.cursor.execute(f"INSERT INTO {cst.DB_NAME}.{cst.CATEGORIES_TABLE}"
+                                f"(id, name, url) VALUES (NULL, %s, %s)",
+                                (self.json_data_request['tags'][self.category_index]['name'],
+                                 self.json_data_request['tags'][self.category_index]['url']))
+            self.category_index += 1
+
+        self.db_connection.commit()
 
 
-    def show_category_list(self):
-        self.cursor.execute(f"SELECT * FROM {cst.DB_NAME}.{cst.CATG_TABLE}")
-        self.catg_list = self.cursor.fetchall()
-
-        return self.catg_list
+    def show_categories_number_in_db(self):
+        print(cst.YELLOW + "\n Categories in database : " + cst.CYAN
+              + f"{len(self.db_column('id'))}")
 
 
-    # ///////////////////////////// TERMINAL MODE /////////////////////////////
+    def create_category_list_from_db(self):
+        self.category_db_list = []
 
-    def category_for_terminal(self, choice): 
-        if choice == "1":
-            self.create_category_table()
-            print(cst.MAGENTA + "\n DATABASE STATUS => "
-                + cst.GREEN + "DATABASE HAS BEEN UPDATED SUCCESSFULLY...")
-            print(cst.YELLOW + "\n There are "
-                + cst.CYAN + f"{len(self.check_category_table())}"
-                + cst.YELLOW + " categories in database.")
-            
-        elif choice == "2":
-            if len(self.check_category_table()) == 0:  # -- If table is empty
-                    print(cst.MAGENTA + "\n Categories table is empty...")
-                    time.sleep(3)
-                    logo.logo_connected()
-            else:
-                for catg in self.show_category_list():
-                    print(cst.YELLOW + (str(catg)))
-                
-                print("")
+        for row in self.db_column('*'):
+            self.add_values = self.category_db_keys(
+                row[0],  # -- ID --
+                row[1],  # -- Name --
+                row[2])  # -- URL --
+            self.category_db_list.append(self.add_values)
 
-        else:
-            print(cst.RED + "\n WRONG CHOICE ! Please, select with 'y' or 'n'.\n")
-            print("")
+        return self.category_db_list
