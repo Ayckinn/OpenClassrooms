@@ -1,79 +1,130 @@
 # -*- coding: UTF-8 -*-
 
 # ===========================================================
-# =            OPEN FOOD FACTS DATABASE HANDLING            =
+# =           OPEN FOOD FACTS DATABASE MANAGEMENT           =
 # =               OPENCLASSROOMS - PROJECT 05               =
 # =                                                         =
 # =        Use publics datas from OpenFood Facts API        =
 # =              OFF Viewer - TERMINAL VERSION              =
 # = =========================================================
 
-
 import sys
 import time
 import ui_app
 
-from tools import logo
-from tools import constants as cst
+from term import logo
+from tools import utils
+from term import terminal_list
+from db_requests import products
 from db_requests import categories
+from tools import constants as cst
+from json.decoder import JSONDecodeError
 
-CATG_RQ = categories.Category()
+category_request = categories.Category()
+product_request = products.Products()
+terminal_list_options = terminal_list.TerminalListOptions()
+
+
+def display_logo():
+    logo.logo_connected()
+    category_request.show_categories_number_in_db()
+    product_request.show_products_number_in_db()
 
 
 def terminal_mode():
     loop = True
-    
     try:
-        logo.logo_connected()
-
-        user_response = input(" \n Do you want to update database (y/n) : ").lower()
-        if user_response == 'y':
-            CATG_RQ.create_category_table()
-            print(cst.MAGENTA + "\n DATABASE STATUS => " 
-                + cst.GREEN + "DATABASE HAS BEEN UPDATED SUCCESSFULLY...")
-            print(cst.YELLOW + "\n There are " + cst.CYAN 
-                + f"{len(CATG_RQ.check_category_table())}" 
-                + cst.YELLOW + " categories in database.")
-        
-        elif user_response == 'n':
-            print(cst.MAGENTA + "\n DATABASE STATUS => " 
-                + cst.RED + "DATABASE NOT UPDATED !")
-            print(cst.YELLOW + "\n There are " + cst.CYAN 
-                + f"{len(CATG_RQ.check_category_table())}" 
-                + cst.YELLOW + " categories in database.")
-        
-        else:
-            sys.exit(cst.RED + "\n WRONG CHOICE ! Please, choose 'y' or 'n'.\n")
-
         try:
-            while loop:
-                print("""\n Choose an option :
+            display_logo()
+            
+            user_response = input("\n Do you want to update database (y/n) : ").lower()
+            if user_response == 'y':
+                print("\n Database update in progress.. Please wait....")
+                category_request.add_categories_in_db()
+                time.sleep(2)
+                product_request.add_products_in_db()
+                display_logo()
+                print(cst.DB_STATUS + cst.UPDATE_OK)
 
-     [1]  \033[1;35mUpdate database\033[0;m
-     [2]  \033[1;35mDisplay all categories\033[0;m
-     [3]  \033[1;38mDisplay all products\033[0;m
-     [4]  \033[1;38mAdd products to favorites\033[0;m
-     [5]  \033[1;38mDisplay all favorites\033[0;m
+            elif user_response == 'n':
+                print(cst.DB_STATUS + cst.UPDATE_NOK)
+            else:
+                sys.exit(cst.WRONG_CHOICE)
 
-     [ui] \033[1;35mGraphical User Interface Mode\033[0;m
-     [0c] \033[1;35mClear terminal\033[0;m
-     [0x] \033[1;35mExit\033[0;m
-        """)
-                user_choice = input(cst.CYAN + " >> " + cst.WHITE)
-                if user_choice == "ui":
-                    ui_app.ui_mode()
-                elif user_choice == "0c":
-                    logo.logo_connected()
-                elif user_choice == "0x":
-                    sys.exit(cst.BLUE + "\n Program exit... See you soon ^^\n")
-                else:
-                    CATG_RQ.category_for_terminal(user_choice)
+            try:
+                while loop:
+                    terminal_list_options.print_list()
+                    user_choice = input(cst.CYAN + " >> " + cst.WHITE)
 
+                    if user_choice == "1":
+                        print("\n Database update in progress.. Please wait....")
+                        category_request.add_categories_in_db()
+                        print(cst.DB_STATUS + cst.UPDATE_OK)
+                        category_request.show_categories_number_in_db()
+                        product_request.show_products_number_in_db()
+
+                    elif user_choice == "2":
+                        if len(category_request.db_column('id')) == 0:
+                            print(cst.MAGENTA + cst.EMPTY_CATEGORIES_TABLE_MSG)
+                            time.sleep(3)
+                            display_logo()
+                        else:
+                            print()
+                            for category in category_request.db_column('*'):
+                                utils.teminal_loop_for_displaying_items(category, cst.YELLOW, cst.BLUE)
+                            print()
+
+                    elif user_choice == "3":
+                        if len(product_request.db_column('id')) == 0:
+                            print(cst.MAGENTA + cst.EMPTY_PRODUCTS_TABLE_MSG)
+                            time.sleep(3)
+                            display_logo()
+                        else:
+                            print()
+                            for product in product_request.db_column('*'):
+                                utils.teminal_loop_for_displaying_items(product, cst.CYAN, cst.MAGENTA)
+                            print()
+
+                    elif user_choice == "4":
+                        try:
+                            if len(product_request.db_column('id')) == 0:
+                                print(cst.MAGENTA + cst.EMPTY_PRODUCTS_TABLE_MSG)
+                                time.sleep(3)
+                                display_logo()
+                            else:
+                                user_select = int(input("\n Choose a category by ID : "))
+                                print()
+                                for product in product_request.display_products_for_a_category(user_select):
+                                    utils.teminal_loop_for_displaying_items(product, cst.RED, cst.WHITE)
+                                print()
+                        except ValueError:
+                            print(cst.RED + "\n Please, select by category ID, letters are not allowed...")
+
+                    # ////////////////////////////// JUST FOR TEST //////////////////////////////
+                    elif user_choice == "t":
+                        product_request.add_products_in_db()
+                        print(cst.DB_STATUS + cst.UPDATE_OK)
+                        category_request.show_categories_number_in_db()
+                        product_request.show_products_number_in_db()
+                    # ///////////////////////////////////////////////////////////////////////////
+
+                    elif user_choice == "i":
+                        ui_app.ui_mode()
+                    elif user_choice == "c":
+                        logo.logo_connected()
+                        category_request.show_categories_number_in_db()
+                        product_request.show_products_number_in_db()
+                    elif user_choice == "x":
+                        sys.exit(cst.EXIT_MSG)
+                    else:
+                        print(cst.WRONG_CHOICE + "\n")
+
+            except KeyboardInterrupt:
+                sys.exit("\n\n" + cst.KILLED_MSG)
         except KeyboardInterrupt:
-            sys.exit("\n\n" + cst.RED +" Program killed by user..\n")
-    
-    except KeyboardInterrupt:
-        sys.exit("\n\n" + cst.RED +" Program killed by user..\n")
+            sys.exit("\n\n" + cst.KILLED_MSG)
+    except JSONDecodeError:
+        print(cst.URL_ERROR)
 
 
 if __name__ == '__main__':
