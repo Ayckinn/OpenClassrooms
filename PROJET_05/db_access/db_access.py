@@ -6,12 +6,12 @@
 import os
 import sys
 
-from tools import logo
+from term import logo
 from tools import constants as cst
 from mysql import connector as mysql
 
 
-class DBcnx:
+class DBConnection:
     """
     Module used for database access and management
     """
