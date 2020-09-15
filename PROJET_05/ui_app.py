@@ -1,84 +1,66 @@
 # -*- coding: UTF-8 -*-
 
 # ===========================================================
-# =            OPEN FOOD FACTS DATABASE HANDLING            =
+# =           OPEN FOOD FACTS DATABASE MANAGEMENT           =
 # =               OPENCLASSROOMS - PROJECT 05               =
 # =                                                         =
 # =        Use publics datas from OpenFood Facts API        =
 # =                 OFF Viewer : UI VERSION                 =
 # = =========================================================
 
-
 import pathlib
 
-from tools import constants as cst
+from tools import utils
 from PyQt5 import QtWidgets, uic
+from db_requests import products
 from db_requests import categories
+from tools import constants as cst
+from json.decoder import JSONDecodeError
 
-CATG_RQ = categories.Category()
-APP_WINDOW = QtWidgets.QApplication([])
-UI = uic.loadUi(".\\ui\\ui_mode.ui")
-ADD_ITEM = UI.listWidget.addItem
+app = QtWidgets.QApplication([])
+ui_view = uic.loadUi(".\\ui\\ui_db_view.ui")
+category_request = categories.Category()
+product_request = products.Products()
 
 
-# -- UI EVENTS --
-def ui_mode():
+def db_ui_view():
 	# -- Buttons events --
-	UI.db_up_btn.clicked.connect(db_update)
-	UI.dp_cat_btn.clicked.connect(show_list)
-	UI.cls_list_btn.clicked.connect(clear_list)
-	UI.exit_btn.clicked.connect(UI.close)
-	UI.refresh_db_btn.clicked.connect(refresh_db)
+	#ui_view.db_up_btn.clicked.connect(db_update)
+	ui_view.dp_cat_btn.clicked.connect(categories_list)
+	ui_view.dp_prod_btn.clicked.connect(products_list)
+	ui_view.exit_btn.clicked.connect(ui_view.close)
 
 	# -- label events --
-	nb_catg_txt()
+	ui_view.nb_catg_lbl.setText(str(len(category_request.db_column('id'))))
+	ui_view.nb_prod_lbl.setText(str(len(product_request.db_column('id'))))
 
-	UI.show()
-	APP_WINDOW.exec()
-
-
-def db_update():
-	clear_list()
-	ADD_ITEM("\n Database update in progress... Please, wait...")
-	CATG_RQ.create_category_table()
-	ADD_ITEM(" Database has been updated successfully...")
-	nb_catg_txt()
+	ui_view.show()
+	app.exec()
 
 
-def show_list():
-	if len(CATG_RQ.check_category_table()) == 0:  # -- If table is empty
-		clear_list()
-		ADD_ITEM("\n Categories table is empty !")
-	else:
-		clear_list()
-		for catg in CATG_RQ.show_category_list():
-			ADD_ITEM(str(catg))
+def show_list(table):
+	ui_view.tableWidget.setRowCount(0)
 
+	for row_number, row_data in enumerate (table.db_column('*')):
+		ui_view.tableWidget.insertRow(row_number)
+		for column_number, column_data in enumerate (row_data):
+			ui_view.tableWidget.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(column_data)))
+
+
+def categories_list():
+	show_list(category_request)
+
+def products_list():
+	show_list(product_request)
 
 def clear_list():
-	UI.listWidget.clear()
-
-
-def nb_catg_txt():
-	UI.nb_catg_lbl.setText(str(len(CATG_RQ.check_category_table())))
-
-
-def refresh_db():
-    clear_list()
-    ADD_ITEM("\n Database has been refreshed...")
-
-    nb_catg_txt()
-    
-    if len(CATG_RQ.check_category_table()) == 0:  # -- If table is empty
-        ADD_ITEM("\n Categories table is empty !")
-    else:
-    	for catg in CATG_RQ.show_category_list():
-    		ADD_ITEM((str(catg)))
+	ui_view.tableWidget.clear()
 
 
 if __name__ == '__main__':
 	if pathlib.Path(cst.FONT_PATH).is_file():
 		print(cst.GREEN + "\n Font OK\n")
-		ui_mode()
+		db_ui_view()
 	else:
-		print(cst.RED + "\n Fonts are missing... Please, install fonts contained in the [FONTS] folder.\n")
+		print(cst.RED + "\n Fonts are missing..."
+			"Please, install fonts contained in the [FONTS] folder.\n")
