@@ -15,19 +15,19 @@ import ui_app
 from term import logo
 from tools import utils
 from term import terminal_list
-from db_requests import products
-from db_requests import categories
 from tools import constants as cst
+from db_requests import db_products
+from db_requests import db_categories
 from json.decoder import JSONDecodeError
 
-category_request = categories.Category()
-product_request = products.Products()
+categories_in_db = db_categories.Category()
+product_request = db_products.Products()
 terminal_list_options = terminal_list.TerminalListOptions()
 
 
 def display_logo():
     logo.logo_connected()
-    category_request.show_categories_number_in_db()
+    categories_in_db.show_categories_number_in_db()
     product_request.show_products_number_in_db()
 
 
@@ -36,45 +36,39 @@ def terminal_mode():
     try:
         try:
             display_logo()
-            
-            user_response = input("\n Do you want to update database (y/n) : ").lower()
-            if user_response == 'y':
-                print("\n Database update in progress.. Please wait....")
-                category_request.add_categories_in_db()
-                time.sleep(2)
-                product_request.add_products_in_db()
-                display_logo()
-                print(cst.DB_STATUS + cst.UPDATE_OK)
-
-            elif user_response == 'n':
-                print(cst.DB_STATUS + cst.UPDATE_NOK)
-            else:
-                sys.exit(cst.WRONG_CHOICE)
-
             try:
                 while loop:
                     terminal_list_options.print_list()
                     user_choice = input(cst.CYAN + " >> " + cst.WHITE)
 
                     if user_choice == "1":
-                        print("\n Database update in progress.. Please wait....")
-                        category_request.add_categories_in_db()
+                        print(cst.CYAN + "\n Add categories...")
+                        print(" Database update in progress.. Please wait....")
+                        categories_in_db.add_categories_in_db()
                         print(cst.DB_STATUS + cst.UPDATE_OK)
-                        category_request.show_categories_number_in_db()
+                        categories_in_db.show_categories_number_in_db()
                         product_request.show_products_number_in_db()
 
                     elif user_choice == "2":
-                        if len(category_request.db_column('id')) == 0:
+                        if len(categories_in_db.db_column('id')) == 0:
                             print(cst.MAGENTA + cst.EMPTY_CATEGORIES_TABLE_MSG)
                             time.sleep(3)
                             display_logo()
                         else:
                             print()
-                            for category in category_request.db_column('*'):
+                            for category in categories_in_db.db_column('*'):
                                 utils.teminal_loop_for_displaying_items(category, cst.YELLOW, cst.BLUE)
                             print()
 
                     elif user_choice == "3":
+                        print(cst.CYAN + "\n Add products...")
+                        print(" Database update in progress.. Please wait....")
+                        product_request.add_products_in_db()
+                        print(cst.DB_STATUS + cst.UPDATE_OK)
+                        categories_in_db.show_categories_number_in_db()
+                        product_request.show_products_number_in_db()
+
+                    elif user_choice == "4":
                         if len(product_request.db_column('id')) == 0:
                             print(cst.MAGENTA + cst.EMPTY_PRODUCTS_TABLE_MSG)
                             time.sleep(3)
@@ -85,7 +79,7 @@ def terminal_mode():
                                 utils.teminal_loop_for_displaying_items(product, cst.CYAN, cst.MAGENTA)
                             print()
 
-                    elif user_choice == "4":
+                    elif user_choice == "5":
                         try:
                             if len(product_request.db_column('id')) == 0:
                                 print(cst.MAGENTA + cst.EMPTY_PRODUCTS_TABLE_MSG)
@@ -100,19 +94,11 @@ def terminal_mode():
                         except ValueError:
                             print(cst.RED + "\n Please, select by category ID, letters are not allowed...")
 
-                    # ////////////////////////////// JUST FOR TEST //////////////////////////////
-                    elif user_choice == "t":
-                        product_request.add_products_in_db()
-                        print(cst.DB_STATUS + cst.UPDATE_OK)
-                        category_request.show_categories_number_in_db()
-                        product_request.show_products_number_in_db()
-                    # ///////////////////////////////////////////////////////////////////////////
-
                     elif user_choice == "i":
                         ui_app.ui_mode()
                     elif user_choice == "c":
                         logo.logo_connected()
-                        category_request.show_categories_number_in_db()
+                        categories_in_db.show_categories_number_in_db()
                         product_request.show_products_number_in_db()
                     elif user_choice == "x":
                         sys.exit(cst.EXIT_MSG)

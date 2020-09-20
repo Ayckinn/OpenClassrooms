@@ -12,55 +12,75 @@ import pathlib
 
 from tools import utils
 from PyQt5 import QtWidgets, uic
-from db_requests import products
-from db_requests import categories
 from tools import constants as cst
+from db_requests import db_products
+from db_requests import db_categories
 from json.decoder import JSONDecodeError
 
 app = QtWidgets.QApplication([])
-ui_view = uic.loadUi(".\\ui\\ui_db_view.ui")
-category_request = categories.Category()
-product_request = products.Products()
+gui = uic.loadUi(".\\ui\\ui_mode.ui")
+category_request = db_categories.Category()
+product_request = db_products.Products()
 
 
-def db_ui_view():
+# -- UI EVENTS --
+def ui_mode():
 	# -- Buttons events --
-	#ui_view.db_up_btn.clicked.connect(db_update)
-	ui_view.dp_cat_btn.clicked.connect(categories_list)
-	ui_view.dp_prod_btn.clicked.connect(products_list)
-	ui_view.exit_btn.clicked.connect(ui_view.close)
+	gui.db_up_btn.clicked.connect(db_update)
+	
+	gui.cls_list_btn.clicked.connect(clear_list)
+	gui.dp_cat_btn.clicked.connect(show_categories_list)
+	gui.dp_prod_btn.clicked.connect(show_products_list)
+	gui.exit_btn.clicked.connect(gui.close)
 
 	# -- label events --
-	ui_view.nb_catg_lbl.setText(str(len(category_request.db_column('id'))))
-	ui_view.nb_prod_lbl.setText(str(len(product_request.db_column('id'))))
+	gui.nb_catg_lbl.setText(str(len(category_request.db_column('id'))))
+	gui.nb_prod_lbl.setText(str(len(product_request.db_column('id'))))
 
-	ui_view.show()
+	gui.show()
 	app.exec()
 
 
-def show_list(table):
-	ui_view.tableWidget.setRowCount(0)
+def db_update():
+	try:
+		clear_list()
+		category_request.add_categories_in_db()
+		product_request.add_products_in_db()
+		gui.listWidget.addItem(" Database has been updated successfully...")
+		gui.nb_catg_lbl.setText(str(len(category_request.db_column('id'))))
+		gui.nb_prod_lbl.setText(str(len(product_request.db_column('id'))))
+	except JSONDecodeError:
+		gui.listWidget.addItem(cst.URL_ERROR)
 
-	for row_number, row_data in enumerate (table.db_column('*')):
-		ui_view.tableWidget.insertRow(row_number)
-		for column_number, column_data in enumerate (row_data):
-			ui_view.tableWidget.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(column_data)))
+
+def show_categories_list():
+	if len(category_request.db_column('id')) == 0:  # -- If table is empty
+		clear_list()
+		gui.listWidget.addItem(cst.EMPTY_CATEGORIES_TABLE_MSG)
+	else:
+		clear_list()
+		for category in category_request.db_column('*'):
+			gui.listWidget.addItem(str(category))
 
 
-def categories_list():
-	show_list(category_request)
+def show_products_list():
+	if len(product_request.db_column('id')) == 0:
+		clear_list()
+		gui.listWidget.addItem(cst.EMPTY_PRODUCTS_TABLE_MSG)
+	else:
+		clear_list()
+		for product in product_request.db_column('*'):
+			gui.listWidget.addItem(str(product))
 
-def products_list():
-	show_list(product_request)
 
 def clear_list():
-	ui_view.tableWidget.clear()
+	gui.listWidget.clear()
 
 
 if __name__ == '__main__':
 	if pathlib.Path(cst.FONT_PATH).is_file():
 		print(cst.GREEN + "\n Font OK\n")
-		db_ui_view()
+		ui_mode()
 	else:
 		print(cst.RED + "\n Fonts are missing..."
 			"Please, install fonts contained in the [FONTS] folder.\n")
