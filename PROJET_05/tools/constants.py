@@ -7,9 +7,8 @@ import pathlib
 import colorama
 
 from colorama import Fore
-from db_access import db_access
 
-colorama.init(autoreset=True)
+colorama.init(autoreset = True)
 
 
 # -- GENERAL CONSTANTS --
@@ -24,9 +23,9 @@ DB_NAME = 'openfoodfacts'
 
 
 # -- TABLES CONSTANTS --
-CATEGORIES_TABLE = 'categories'
-PRODUCTS_TABLE = 'products'
-FAV_TABLE = 'favorites'
+CATEGORY_TABLE = 'category'
+PRODUCT_TABLE = 'product'
+FAV_TABLE = 'favorite'
 
 
 # -- FONTS COLOR --
@@ -52,6 +51,9 @@ UPDATE_NOK = RED + "DATABASE NOT UPDATED !"
 URL_ERROR = RED + "\n UPDATE ERROR !! URL DOWN...\n"
 KILLED_MSG = RED + " Program killed by user..\n"
 EXIT_MSG = BLUE + "\n Program exit... See you soon ^^\n"
-WRONG_CHOICE = RED + "\n WRONG CHOICE ! Please, select with 'y' or 'n'.\n"
+WRONG_CHOICE_Y_N = RED + "\n WRONG CHOICE ! Please, select with 'y' or 'n'.\n"
+WRONG_CHOICE_LIST = RED + "\n WRONG CHOICE ! Please, select an option in the list..."
 EMPTY_CATEGORIES_TABLE_MSG = "\n Categories table is empty..."
 EMPTY_PRODUCTS_TABLE_MSG = "\n Products table is empty..."
+DB_UPDATE_IN_PROGRESS = " Database update in progress... Please wait..."
+EXCEED_DB_CATEGORY_ID = " The number you have chosen exceeds the number of categories in the database..."
