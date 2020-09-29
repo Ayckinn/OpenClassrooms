@@ -10,6 +10,7 @@ from tools import constants as cst
 
 
 class TerminalScript:
+    """ This class allows to manage all functions for terminal view """
 
     def __init__(self):
         self.controller = Controller()
@@ -37,8 +38,8 @@ class TerminalScript:
         self.display_logo()
 
     def user_choice_two(self):
-        if len(self.controller.get_number_of_items_in_id_column()) == 0:
-            print(cst.MAGENTA + cst.EMPTY_CATEGORIES_TABLE_MSG)
+        if len(self.controller.get_number_of_items_in_category_id_column()) == 0:
+            print(cst.EMPTY_CATEGORY_TABLE_MSG)
             time.sleep(3)
             self.display_logo()
         else:
@@ -55,8 +56,8 @@ class TerminalScript:
         self.display_logo()
 
     def user_choice_four(self):
-        if len(self.controller.get_number_of_items_in_id_column()) == 0:
-            print(cst.MAGENTA + cst.EMPTY_PRODUCTS_TABLE_MSG)
+        if len(self.controller.get_number_of_items_in_category_id_column()) == 0:
+            print(cst.EMPTY_PRODUCT_TABLE_MSG)
             time.sleep(3)
             self.display_logo()
         else:
@@ -66,15 +67,15 @@ class TerminalScript:
 
     def user_choice_five(self):
         try:
-            if len(self.controller.get_number_of_items_in_id_column()) == 0:
-                print(cst.MAGENTA + cst.EMPTY_PRODUCTS_TABLE_MSG)
+            if len(self.controller.get_number_of_items_in_category_id_column()) == 0:
+                print(cst.MAGENTA + cst.EMPTY_PRODUCT_TABLE_MSG)
                 time.sleep(3)
                 self.display_logo()
             else:
                 user_select = int(input("\n Choose a category by ID : "))
                 print()
-                if user_select > len(self.controller.get_number_of_items_in_id_column()):
-                    print(cst.RED + cst.EXCEED_DB_CATEGORY_ID)
+                if user_select > len(self.controller.get_number_of_items_in_category_id_column()):
+                    print(cst.EXCEED_DB_CATEGORY_ID)
                 for product in self.controller.get_products_by_category_id(user_select):
                     self.loop_for_displaying_items(product)
                 print()

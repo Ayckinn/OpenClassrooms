@@ -1,15 +1,12 @@
 # -*- coding: UTF-8 -*-
 
-# ===========================================================
-# =           OPEN FOOD FACTS DATABASE MANAGEMENT           =
-# =               OPENCLASSROOMS - PROJECT 05               =
-# =                                                         =
-# =        Use publics datas from OpenFood Facts API        =
-# =              OFF Viewer - TERMINAL VERSION              =
-# = =========================================================
+# =====================================
+# =   OFF Viewer - TERMINAL VERSION   =
+# = ===================================
 
 import sys
 
+from ui_app import UIMode
 from controller import Controller
 from tools import constants as cst
 from json.decoder import JSONDecodeError
@@ -45,7 +42,7 @@ class TerminalMode:
                         elif user_choice == "5":
                             self.terminal_script.user_choice_five()
                         elif user_choice == "i":
-                            pass
+                            UIMode().main()
                         elif user_choice == "c":
                             self.terminal_script.display_logo()
                         elif user_choice == "x":

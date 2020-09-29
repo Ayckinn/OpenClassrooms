@@ -22,7 +22,7 @@ class Controller:
     def get_all_items_in_category_table(self):
         return self.db_category.db_column('*')
 
-    def get_number_of_items_in_id_column(self):
+    def get_number_of_items_in_category_id_column(self):
         return self.db_category.db_column('id')
 
     # ===== PRODUCT HANDLER =====
@@ -37,3 +37,13 @@ class Controller:
 
     def get_products_by_category_id(self, cat_id):
         return self.db_product.show_products_by_category_id(cat_id)
+
+    def get_number_of_items_in_product_id_column(self):
+        return self.db_product.db_column('id')
+
+    # ===== FOR UI MODE =====
+    def display_number_of_categories_in_db(self):
+        return str(len(self.get_number_of_items_in_category_id_column()))
+
+    def display_number_of_products_in_db(self):
+        return str(len(self.get_number_of_items_in_product_id_column()))
