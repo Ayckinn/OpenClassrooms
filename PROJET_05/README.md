@@ -52,4 +52,4 @@ deactivate
 
 ### UI MODE
 
-<img width=500px src="https://github.com/Ayckinn/OpenClassrooms/blob/master/PROJET_05/screenshots/terminal_mode.png" />
+<img width=500px src="https://github.com/Ayckinn/OpenClassrooms/blob/master/PROJET_05/screenshots/ui_mode.png" />
