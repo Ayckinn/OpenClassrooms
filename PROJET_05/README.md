@@ -1,7 +1,17 @@
 # OpenFoodFacts apps - OpenClassrooms : Project 5
 Create database and use public datas from OpenFoodFacts API
 
-### Usage
+## Features
+This program allows you to handle datas from the OpenFoodFacts API in a database that you have created.
+
+You can :
+- Add categories in database
+- Display all categories from database
+- Add products in database
+- Display all products from database
+- Display products by category
+
+## Usage
 Install virtual environment : 
 ```bash
 pip install virtualenv
@@ -35,3 +45,5 @@ To deactivate virtualenv, just enter :
 ```bash
 deactivate
 ```
+
+### Terminal mode
