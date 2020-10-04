@@ -1,8 +1,10 @@
 # OpenFoodFacts apps - OpenClassrooms : Project 5
 Create database and use public datas from OpenFoodFacts API
 
-### Usage
-Install virtual environment : ```pip install virtualenv```
+### ~= Usage =~
+Install virtual environment : 
+
+```pip install virtualenv```
 
 Create virualenv folder : ```virtualenv .env```
 
