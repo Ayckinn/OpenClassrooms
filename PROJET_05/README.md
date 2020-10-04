@@ -3,8 +3,9 @@ Create database and use public datas from OpenFoodFacts API
 
 ### Usage
 Install virtual environment : 
-
-```pip install virtualenv```
+```bash
+pip install virtualenv
+```
 
 Create virualenv folder : 
 ```bash
@@ -17,17 +18,20 @@ Activate virtualenv :
 ```
 
 Install packages : 
-
-```pip install -r requirements.txt```
+```bash
+pip install -r requirements.txt
+```
 
 Run program : 
-
-```python openfoodfacts.py```
+```bash
+python openfoodfacts.py
+```
 
 Choose view mode (Terminal or GUI)
 
 <img width=500px src="https://github.com/Ayckinn/OpenClassrooms/blob/master/PROJET_05/screenshots/main_view.png" />
 
 To deactivate virtualenv, just enter : 
-
-```deactivate```
+```bash
+deactivate
+```
