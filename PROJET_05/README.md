@@ -46,10 +46,10 @@ To deactivate virtualenv, just enter :
 deactivate
 ```
 
-### Terminal mode
+#### Terminal mode
 
 <img width=500px src="https://github.com/Ayckinn/OpenClassrooms/blob/master/PROJET_05/screenshots/terminal_mode.png" />
 
-### UI MODE
+#### UI mode
 
 <img width=500px src="https://github.com/Ayckinn/OpenClassrooms/blob/master/PROJET_05/screenshots/ui_mode.png" />
