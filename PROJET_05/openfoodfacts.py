@@ -11,22 +11,26 @@ import sys
 import time
 
 from ui_app import UIMode
-from terminal import logo
+from terminal.logo import Logo
 from tools import constants as cst
 from terminal_app import TerminalMode
+from terminal.scripts import TerminalScript
 
 
 class OffApp:
 
     def __init__(self):
         self.loop = True
+        self.logo = Logo()
         self.ui = UIMode()
         self.terminal = TerminalMode()
+        self.terminal_script = TerminalScript()
 
     def main(self):
+        self.logo.neutral_logo()
         try:
             while self.loop:
-                logo.logo_connected()
+                self.terminal_script.display_logo()
 
                 print(""" Please, choose a view app :
                 
@@ -52,4 +56,5 @@ class OffApp:
 
 
 if __name__ == "__main__":
+    print(cst.LOADING_DB_MSG)
     OffApp().main()
