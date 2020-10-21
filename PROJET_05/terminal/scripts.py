@@ -59,7 +59,7 @@ class TerminalScript:
         self.display_logo()
 
     def user_choice_four(self):
-        if len(self.controller.get_items_in_category_table('id')) == 0:
+        if len(self.controller.get_items_in_product_table('id')) == 0:
             print(cst.EMPTY_PRODUCT_TABLE_MSG)
             time.sleep(3)
             self.display_logo()

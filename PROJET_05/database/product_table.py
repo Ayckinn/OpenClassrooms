@@ -33,10 +33,9 @@ class Product:
         return self.get_value_keys
 
     def refresh_category_list(self):
-         self.category_list = Category().get_category_list_from_db()
+        self.category_list = Category().get_category_list_from_db()
 
     def add_products_in_db(self):
-        print('add in product')
         self.category_index = 0
         self.refresh_category_list()
         for category in self.category_list:
