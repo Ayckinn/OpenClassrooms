@@ -30,19 +30,19 @@ class TerminalMode:
                     user_choice = input(cst.CYAN + " >> " + cst.WHITE)
 
                     if user_choice == "1":
-                        self.terminal_script.user_choice_one()
+                        self.terminal_script.db_add_categories()
                     elif user_choice == "2":
-                        self.terminal_script.user_choice_two()
+                        self.terminal_script.db_display_categories()
                     elif user_choice == "3":
-                        self.terminal_script.user_choice_three()
+                        self.terminal_script.db_add_products()
                     elif user_choice == "4":
-                        self.terminal_script.user_choice_four()
+                        self.terminal_script.db_display_products()
                     elif user_choice == "5":
-                        self.terminal_script.user_choice_five()
+                        self.terminal_script.display_products_by_category()
                     elif user_choice == "6":
-                        self.terminal_script.user_choice_six()
+                        self.terminal_script.db_add_product_to_favorites()
                     elif user_choice == "7":
-                        self.terminal_script.user_choice_seven()
+                        self.terminal_script.db_display_favorites()
                     elif user_choice == "8":
                         self.terminal_script.delete_database()
                     elif user_choice == "i":

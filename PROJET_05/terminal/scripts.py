@@ -31,7 +31,7 @@ class TerminalScript:
         print()
 
     # ===== USER CHOICE MANAGEMENT BLOCK =====
-    def user_choice_one(self):
+    def db_add_categories(self):
         print(cst.CYAN + "\n You have chosen : Add categories in database")
         print(cst.DB_UPDATE_IN_PROGRESS)
         self.controller.add_categories_in_db()
@@ -39,7 +39,7 @@ class TerminalScript:
         time.sleep(3)
         self.display_logo()
 
-    def user_choice_two(self):
+    def db_display_categories(self):
         if len(self.controller.get_items_in_category_table('id')) == 0:
             print(cst.EMPTY_CATEGORY_TABLE_MSG)
             time.sleep(3)
@@ -50,7 +50,7 @@ class TerminalScript:
                 self.loop_for_displaying_items(category)
             print()
 
-    def user_choice_three(self):
+    def db_add_products(self):
         print(cst.CYAN + "\n You have chosen : Add products in database")
         print(cst.DB_UPDATE_IN_PROGRESS)
         self.controller.add_product_in_db()
@@ -58,7 +58,7 @@ class TerminalScript:
         time.sleep(3)
         self.display_logo()
 
-    def user_choice_four(self):
+    def db_display_products(self):
         if len(self.controller.get_items_in_product_table('id')) == 0:
             print(cst.EMPTY_PRODUCT_TABLE_MSG)
             time.sleep(3)
@@ -69,7 +69,7 @@ class TerminalScript:
                 self.loop_for_displaying_items(product)
             print()
 
-    def user_choice_five(self):
+    def display_products_by_category(self):
         try:
             if len(self.controller.get_items_in_category_table('id')) == 0:
                 print(cst.MAGENTA + cst.EMPTY_CATEGORY_TABLE_MSG)
@@ -86,7 +86,7 @@ class TerminalScript:
         except ValueError:
             print(cst.RED + "\n Please, select by category ID, letters are not allowed...")
 
-    def user_choice_six(self):
+    def db_add_product_to_favorites(self):
         try:
             if len(self.controller.get_items_in_product_table('id')) == 0:
                 print(cst.MAGENTA + cst.EMPTY_PRODUCT_TABLE_MSG)
@@ -104,7 +104,7 @@ class TerminalScript:
         except ValueError:
             print(cst.RED + "\n Please, select by category ID, letters are not allowed...")
 
-    def user_choice_seven(self):
+    def db_display_favorites(self):
         if len(self.controller.get_items_in_favorite_table('id')) == 0:
             print(cst.EMPTY_FAVORITE_TABLE_MSG)
             time.sleep(3)
