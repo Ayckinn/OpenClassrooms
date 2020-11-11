@@ -19,7 +19,7 @@ class TerminalMode:
     def __init__(self):
         self.terminal_script = TerminalScript()
         self.terminal_list = ListOptions()
-        
+
     def main(self):
         self.loop = True
         try:
@@ -40,7 +40,7 @@ class TerminalMode:
                     elif user_choice == "5":
                         self.terminal_script.display_products_by_category()
                     elif user_choice == "6":
-                        self.terminal_script.db_add_product_to_favorites()
+                        self.terminal_script.add_product_in_favorite()
                     elif user_choice == "7":
                         self.terminal_script.db_display_favorites()
                     elif user_choice == "8":

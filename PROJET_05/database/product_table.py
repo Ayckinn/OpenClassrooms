@@ -18,7 +18,6 @@ class Product:
     def db_column(self, column):
         self.cursor.execute(f"SELECT {column} FROM {cst.DB_NAME}.{cst.PRODUCT_TABLE}")
         self.query = self.cursor.fetchall()
-
         return self.query
 
     def table_keys(self, product_id, name, brand, nutriscore, url):
@@ -27,9 +26,7 @@ class Product:
         self.brand = brand
         self.nutriscore = nutriscore
         self.url = url
-
         self.get_value_keys = (name, brand, nutriscore, url)
-
         return self.get_value_keys
 
     def refresh_category_list(self):
@@ -62,7 +59,6 @@ class Product:
                     self.product_index += 1
                 except KeyError:
                     pass
-
             self.db_cnx.commit()
 
     def number_of_products_in_db(self):
@@ -73,14 +69,12 @@ class Product:
         self.cursor.execute(f"SELECT * FROM {cst.DB_NAME}.{cst.PRODUCT_TABLE}\
                             WHERE category_id = {cat_id}")
         self.show_products = self.cursor.fetchall()
-
         return self.show_products
 
     def show_product_by_id(self, prod_id):
         self.cursor.execute(f"SELECT * FROM {cst.DB_NAME}.{cst.PRODUCT_TABLE}\
                             WHERE id = {prod_id}")
         self.get_product = self.cursor.fetchall()
-
         return self.get_product
 
     def get_product_list_from_db(self):
@@ -94,5 +88,20 @@ class Product:
                 row[3],  # -- NUTRISCORE --
                 row[4])  # -- URL --
             self.product_db_list.append(self.add_values)
-
         return self.product_db_list
+
+    def set_product_as_favorite(self, id_product):
+        self.cursor.execute(f""" UPDATE {cst.DB_NAME}.{cst.PRODUCT_TABLE}
+                            SET is_favorite = true
+                            WHERE id = {id_product} """)
+        self.db_cnx.commit()
+
+    def show_favorites(self):
+        self.cursor.execute(f"SELECT * FROM {cst.DB_NAME}.{cst.PRODUCT_TABLE}\
+                            WHERE is_favorite = 1")
+        self.query = self.cursor.fetchall()
+        return self.query
+
+    def display_number_of_products_in_favorites(self):
+        print(cst.YELLOW + " Favorites in database  : " + cst.CYAN
+              + str(len(self.show_favorites())))

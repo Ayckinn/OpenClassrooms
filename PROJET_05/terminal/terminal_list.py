@@ -11,7 +11,7 @@ class ListOptions:
         pass
 
     def print_list(self):
-        print(""" Choose an option :
+        print("""\n Choose an option :
 
    [1] \033[1;35mAdd categories in database\033[0;m
    [2] \033[1;35mDisplay all categories\033[0;m

@@ -86,34 +86,16 @@ class TerminalScript:
         except ValueError:
             print(cst.RED + "\n Please, select by category ID, letters are not allowed...")
 
-    def db_add_product_to_favorites(self):
-        try:
-            if len(self.controller.get_items_in_product_table('id')) == 0:
-                print(cst.MAGENTA + cst.EMPTY_PRODUCT_TABLE_MSG)
-                time.sleep(3)
-                self.display_logo()
-            else:
-                user_select = int(input("\n Choose a product by ID : "))
-                print()
-                if user_select > len(self.controller.get_items_in_product_table('id')):
-                    print(cst.EXCEED_DB_PRODUCT_ID)
-                else:
-                    product = self.controller.get_product_by_id(user_select)
-                    self.controller.add_product_in_favorite(product[0])
-                print()
-        except ValueError:
-            print(cst.RED + "\n Please, select by category ID, letters are not allowed...")
+    def add_product_in_favorite(self):
+        user_select = int(input("\n Choose a product by ID : "))
+        self.controller.add_product_in_favorite(user_select)
+        print(cst.GREEN + "\n The product has been successfully added in your favorites..")
+        time.sleep(3)
+        self.display_logo()
 
     def db_display_favorites(self):
-        if len(self.controller.get_items_in_favorite_table('id')) == 0:
-            print(cst.EMPTY_FAVORITE_TABLE_MSG)
-            time.sleep(3)
-            self.display_logo()
-        else:
-            print()
-            for fav in self.controller.get_items_in_favorite_table('*'):
-                self.loop_for_displaying_items(fav)
-            print()
+        for fav in self.controller.display_favorites():
+            self.loop_for_displaying_items(fav)
 
     def delete_database(self):
         self.controller.delete_database()
